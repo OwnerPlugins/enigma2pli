@@ -38,6 +38,7 @@ from ServiceReference import ServiceReference, isPlayableForCur
 
 from Tools.ASCIItranslit import legacyEncode
 from Tools.Directories import fileExists, getRecordingFilename, moveFiles
+from Tools import Notifications
 from Tools.Notifications import AddPopup, AddNotificationWithCallback, current_notifications, lock, notificationAdded, notifications, RemovePopup
 
 from enigma import eTimer, eServiceCenter, eDVBServicePMTHandler, iServiceInformation, iPlayableService, eServiceReference, eEPGCache, eActionMap, getDesktop, eDVBDB
@@ -447,9 +448,11 @@ class InfoBarShowHide(InfoBarScreenSaver):
 			self.toggleViews()
 
 	def toggleViews(self):
+		value = config.usage.long_ok_to_toggle_alternative_screens.value
 		if self.shown:
-			self.toggleInfoBarAddon()
-		else:
+			if value in ("infobaradds", "both"):
+				self.toggleInfoBarAddon()
+		elif value in ("secondinfobarsimple", "both"):
 			self.toggleSecondInfoBar()
 
 	def toggleSecondInfoBar(self):
